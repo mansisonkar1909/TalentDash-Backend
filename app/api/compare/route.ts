@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import type { Salary, Company } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 export async function GET(request: Request) {
   try {
@@ -38,8 +38,10 @@ export async function GET(request: Request) {
 
     // Serialize BigInts before returning
 
-type SalaryWithCompany = Salary & { company: Company }
-    function serialize(r: SalaryWithCompany) {
+    type SalaryWithCompany = Prisma.SalaryGetPayload<{
+  include: { company: true }
+    }>
+    const serialize = (r: SalaryWithCompany) => {
       return ({
         ...r,
         base_salary: r.base_salary.toString(),
