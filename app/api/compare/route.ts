@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import type { Salary, Company } from '@prisma/client'
 
 export async function GET(request: Request) {
   try {
@@ -36,13 +37,17 @@ export async function GET(request: Request) {
     }
 
     // Serialize BigInts before returning
-    const serialize = (r: any) => ({
-      ...r,
-      base_salary: r.base_salary.toString(),
-      bonus: r.bonus.toString(),
-      stock: r.stock.toString(),
-      total_compensation: r.total_compensation.toString(),
-    })
+
+type SalaryWithCompany = Salary & { company: Company }
+    function serialize(r: SalaryWithCompany) {
+      return ({
+        ...r,
+        base_salary: r.base_salary.toString(),
+        bonus: r.bonus.toString(),
+        stock: r.stock.toString(),
+        total_compensation: r.total_compensation.toString(),
+      })
+    }
 
     const delta = {
       base_delta:       (record1.base_salary - record2.base_salary).toString(),

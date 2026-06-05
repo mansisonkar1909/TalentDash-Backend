@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import type { Salary } from '@prisma/client'
 
 function computeMedian(values: number[]): number {
   if (values.length === 0) return 0
@@ -38,7 +39,7 @@ export async function GET(
       levelDistribution[s.level] = (levelDistribution[s.level] || 0) + 1
     })
 
-    const salaries = company.salaries.map(s => ({
+    const salaries = company.salaries.map((s: Salary) => ({
       ...s,
       base_salary: s.base_salary.toString(),
       bonus: s.bonus.toString(),

@@ -47,7 +47,7 @@ export async function GET(request: Request) {
     ])
 
     // Serialize BigInt fields
-    const data = records.map(r => ({
+    const data = records.map((r: typeof records[number]) => ({
       ...r,
       base_salary: r.base_salary.toString(),
       bonus: r.bonus.toString(),
