@@ -10,10 +10,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-
-  // Connection URLs are no longer supported in schema files.
-  // Move connection configuration (e.g. DATABASE_URL) to prisma.config.ts
-  // and pass adapter/accelerateUrl to the PrismaClient constructor as needed.
 }
 
 enum Level {
