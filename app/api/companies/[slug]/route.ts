@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { Prisma } from '@prisma/client'
 
 function computeMedian(values: number[]): number {
   if (values.length === 0) return 0
@@ -39,8 +38,8 @@ export async function GET(
       levelDistribution[s.level] = (levelDistribution[s.level] || 0) + 1
     })
 
-    type SalaryRecord = Prisma.SalaryGetPayload<{}>
-    const salaries = company.salaries.map((s: SalaryRecord) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const salaries = company.salaries.map((s: any) => ({
       ...s,
       base_salary: s.base_salary.toString(),
       bonus: s.bonus.toString(),

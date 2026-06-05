@@ -1,6 +1,14 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
-import { Prisma } from '@prisma/client'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const serialize = (r: any) => ({
+  ...r,
+  base_salary: r.base_salary.toString(),
+  bonus: r.bonus.toString(),
+  stock: r.stock.toString(),
+  total_compensation: r.total_compensation.toString(),
+})
 
 export async function GET(request: Request) {
   try {
@@ -15,7 +23,6 @@ export async function GET(request: Request) {
       )
     }
 
-    // Same ID check
     if (s1 === s2) {
       return NextResponse.json(
         { error: true, message: 'Cannot compare a record with itself. s1 and s2 must be different.' },
@@ -36,26 +43,11 @@ export async function GET(request: Request) {
       )
     }
 
-    // Serialize BigInts before returning
-
-    type SalaryWithCompany = Prisma.SalaryGetPayload<{
-  include: { company: true }
-    }>
-    const serialize = (r: SalaryWithCompany) => {
-      return ({
-        ...r,
-        base_salary: r.base_salary.toString(),
-        bonus: r.bonus.toString(),
-        stock: r.stock.toString(),
-        total_compensation: r.total_compensation.toString(),
-      })
-    }
-
     const delta = {
-      base_delta:       (record1.base_salary - record2.base_salary).toString(),
-      bonus_delta:      (record1.bonus - record2.bonus).toString(),
-      stock_delta:      (record1.stock - record2.stock).toString(),
-      tc_delta:         (record1.total_compensation - record2.total_compensation).toString(),
+      base_delta: (record1.base_salary - record2.base_salary).toString(),
+      bonus_delta: (record1.bonus - record2.bonus).toString(),
+      stock_delta: (record1.stock - record2.stock).toString(),
+      tc_delta: (record1.total_compensation - record2.total_compensation).toString(),
       experience_delta: record1.experience_years - record2.experience_years,
     }
 
