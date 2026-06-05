@@ -1,9 +1,8 @@
-import { PrismaNeon } from '@prisma/adapter-neon'
 import { PrismaClient } from '@prisma/client'
 import 'dotenv/config'
 
-const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL! })
-const db = new PrismaClient({ adapter })
+
+const db = new PrismaClient()
 
 async function main() {
   console.log('🌱 Starting seed...')
